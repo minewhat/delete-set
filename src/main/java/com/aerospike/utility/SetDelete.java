@@ -45,6 +45,7 @@ public class SetDelete {
 		options.addOption("p", "port", true, "Server port (default: 3000)");
 		options.addOption("n", "namespace", true, "Namespace (default: test)");
 		options.addOption("s", "set", true, "Set to delete (default: test)");
+		options.addOption("k", "keypattern", false, "Key Pattern to delete");
 		options.addOption("u", "usage", false, "Print usage.");
 
 		CommandLineParser parser = new PosixParser();
@@ -61,11 +62,13 @@ public class SetDelete {
 		int port = Integer.parseInt(portString);
 		String set = cl.getOptionValue("s", "test");
 		String namespace = cl.getOptionValue("n","test");
+		String keyPattern = cl.getOptionValue("k","");
 
 		log.info("Host: " + host);
 		log.info("Port: " + port);
 		log.info("Name space: " + namespace);
 		log.info("Set: " + set);
+		log.info("KeyPattern:" + keyPattern);
 		if (set == null){
 			log.error("You must specify a set");
 			return;
@@ -86,7 +89,9 @@ public class SetDelete {
 					/*
 					 * for each Digest returned, delete it using delete()
 					 */
-					if (client.delete(null, key))
+					bool toremove=true;
+					//if(keyPattern.length()!=0)
+					if (toremove && client.delete(null, key))
 						count++;
 					/*
 					 * after 25,000 records delete, return print the count.
